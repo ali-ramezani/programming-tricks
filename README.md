@@ -43,8 +43,8 @@ python-like-argument.c:10:16: note: in expansion of macro 'f'
 To improve performance it would be better to read whole file once and then read items from string but the problem is there is no file pointer to get moved forward when you use sscanf several times like fscanf.
 Here is the simple solution, just 
 
-* add the following macro in your code and use sscanf like fscanf: 
-* define two variable ps and lps and set ps to zero in the begining
+* add the following macro in your code 
+* define two variables `ps` and `lps` and set ps to zero in the begining
  
 ~~~c
 #define sScanf(fp,fmt,...)  sscanf(&fp[ps], fmt"%n",__VA_ARGS__,&lps);ps+=lps;
@@ -71,13 +71,15 @@ char* ReadFile(const char* fn) {
 }
 
 ...
-	char* fp = ReadFile(filename);
+	char* fp = ReadFile(filename);//fopen(filename,"r");
 	int lps,ps=0;
   
-  int n;
-	sScanf(fp, "%d", &n);
-  
-  float f;
-  sScanf(fp,"%f",&f);
+  	int n;
+	sScanf(fp, "%d", &n);//fscanf(fp, "%d", &n);
+	
+	float f;
+	sScanf(fp,"%f",&f);//fscanf(fp,"%f",&f);
+	
+	free(fp);//fclose(fp);
   ...
 ~~~
