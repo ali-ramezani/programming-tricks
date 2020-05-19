@@ -1,6 +1,6 @@
 # programming-tricks
 
-## Python like arguments for function call
+## Named parameters for function call
 
 Simply the code is here
 
