@@ -97,6 +97,8 @@ The main idea is to store size with the pointer but in -2 index! it means you ar
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+//////////////////////////////////////
+//////////////////////////////////////
 
 void* xmalloc(unsigned int n,size_t type_size){
     void* mem=malloc(sizeof(unsigned int)+n*type_size);
@@ -119,15 +121,33 @@ unsigned int countof(void* mem){
     unsigned int* sizePtr=actual_mem;
     return sizePtr[0];
 }
-
+//////////////////////////////////////
+//////////////////////////////////////
+void FillMyArray(int* myArray){
+	unsigned int size=countof(myArray);
+	for(int i=0;i<size;i++)
+		myArray[i]=i;
+}
+void PrintMyArray(int* myArray){
+	unsigned int size=countof(myArray);
+	for(int i=0;i<size;i++)
+		printf("\n[%d]=%d",i,myArray[i]);
+}
 int main()
 {
     
-    char* s=xmalloc(10,sizeof(char));
-    strcpy(s,"Hello World");
+    char* s=xmalloc(15,sizeof(char));
+    strcpy(s,"Hello World!");
     printf("%s %d",s,countof(s));
     xfree(s);
+    
+    int* iarr=xmalloc(5,sizeof(int));
+    
+    FillMyArray(iarr);
+    PrintMyArray(iarr);
+    
+    xfree(iarr);
+    
     return 0;
 }
-
 ~~~
