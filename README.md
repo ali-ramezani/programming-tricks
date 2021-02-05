@@ -83,3 +83,51 @@ char* ReadFile(const char* fn) {
 	free(fp);//fclose(fp);
   ...
 ~~~
+
+## Pointer with size information
+I answered a question in [Quora](https://qr.ae/pN6yDB). In C when you allocate memory from heap using malloc or other variants you don't have any built-in or standard library function to let users of that memory knows how much is its size. It force you to send size and array as two parameters to whoever needs to use that memory. It is a hassle! 
+Here I made a customized malloc and free that will let you know the size of pointer using pointer itself (countof)
+
+The main idea is to store size with the pointer but in -2 index! it means you array start from 0 to n and I embedded n in -2 position.
+
+**Hint**
+- You can not free this type of memory using standard free which will cause memory leack or corraption. 
+- The countof gives you have given in xmalloc call and it is not the size of the memory in byte. Of course you can change xmalloc code if you like to.
+~~~ C
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+void* xmalloc(unsigned int n,size_t type_size){
+    void* mem=malloc(sizeof(unsigned int)+n*type_size);
+    unsigned int* sizePtr=mem;
+    sizePtr[0]=n;
+    mem+=sizeof(unsigned int);
+    return mem;
+}
+void* xActualPtr(void *mem){
+    void* actual_mem=mem;
+    actual_mem-=sizeof(unsigned int);
+    return actual_mem;
+}
+void xfree(void* mem){
+    free(xActualPtr(mem));
+}
+
+unsigned int countof(void* mem){
+    void* actual_mem=xActualPtr(mem);
+    unsigned int* sizePtr=actual_mem;
+    return sizePtr[0];
+}
+
+int main()
+{
+    
+    char* s=xmalloc(10,sizeof(char));
+    strcpy(s,"Hello World");
+    printf("%s %d",s,countof(s));
+    xfree(s);
+    return 0;
+}
+
+~~~
