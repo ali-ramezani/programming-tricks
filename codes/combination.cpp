@@ -24,13 +24,16 @@ void CombinationCall(int m, CombinationIterator& data, fun OnIter) {
 }
 
 template <typename fun>
-void PopulateOnCombination(int m,int n,fun OnComb){
+void PopulateOnCombination(int SizeOfBasket, int SizeOfSet, fun OnComb) {
+    if (SizeOfBasket == 0 || SizeOfBasket > SizeOfSet) return;
+    if (SizeOfSet == 1) { std::vector<unsigned int> t{ 0 }; OnComb(1, t); return; }
     CombinationIterator ci;
-    ci.SizeOfBasket=m;
-    ci.SizeOfSet=n;
+    ci.SizeOfBasket= SizeOfBasket;
+    ci.SizeOfSet= SizeOfSet;
     ci.chosen.resize(ci.SizeOfBasket);
     ci.inUse.resize(ci.SizeOfSet,false);
-    for (unsigned int i = 0; i < n; i++) ci.options.push_back(i);
+    ci.options.resize(SizeOfSet);
+    for (unsigned int i = 0; i < SizeOfSet; i++) ci.options[i] = i;
     CombinationCall(0,ci,OnComb);
 }
 
