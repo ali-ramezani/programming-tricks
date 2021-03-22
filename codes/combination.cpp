@@ -26,7 +26,7 @@ void CombinationCall(int m, CombinationIterator& data, fun OnIter) {
 template <typename fun>
 void PopulateOnCombination(int SizeOfBasket, int SizeOfSet, fun OnComb) {
     if (SizeOfBasket == 0 || SizeOfBasket > SizeOfSet) return;
-    if (SizeOfSet == 1) { std::vector<unsigned int> t{ 0 }; OnComb(1, t); return; }
+    if (SizeOfSet == 1) { std::vector<unsigned int> t{ 0 }; OnComb(0, t); return; }
     CombinationIterator ci;
     ci.SizeOfBasket= SizeOfBasket;
     ci.SizeOfSet= SizeOfSet;
