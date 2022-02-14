@@ -217,7 +217,7 @@ void PopulateOnCombination(int SizeOfBasket, int SizeOfSet, fun OnComb) {
 
 ~~~
 
-## Using nested struct to categorize features
+# Using nested struct to categorize features
 Sometime your object has so many functionality and you want to categorize them nicely to facilate resue when they are used and also implemented. Most of IDEs automatically show the methods of class when you write the code so by this technique you will also have this chance that IDE will guide you to find suitable method.
 
 The idea is to have a nested class with **No member data** so you can cast main class safely to it and then cast back the nested class to main safely as well to have access to data.
