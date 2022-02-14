@@ -216,3 +216,38 @@ void PopulateOnCombination(int SizeOfBasket, int SizeOfSet, fun OnComb) {
 
 
 ~~~
+
+## Using nested struct to categorize features
+Sometime your object has so many functionality and you want to categorize them nicely to facilate resue when they are used and also implemented. Most of IDEs automatically show the methods of class when you write the code so by this technique you will also have this chance that IDE will guide you to find suitable method.
+
+The idea is to have a nested class with **No member data** so you can cast main class safely to it and then cast back the nested class to main safely as well to have access to data.
+
+
+~~~C++
+#define SUB(cls) friend struct _##cls;_##cls& cls(){return *(_##cls*)this;} struct _##cls
+#define TO(cls) (*(cls*)this)
+
+class Image{
+    int data;
+    public:
+
+//    struct _Read;_Read& Read(){return *(_Read*)this;}
+//    struct _Read{
+    SUB(Read){
+        void FromFile(const std::string& iFileName){ TO(Image).data=iFileName.size();}
+        void FromData(const char* ibuf){TO(Image).data=ibuf[0];}
+    };
+
+    SUB(Filter){
+        SUB(Sobel){
+            void X(){TO(Image).data=0;}
+            void Y(){TO(Image).data=0;}
+        };
+    };
+};
+int main(){
+    Image img;
+    img.Read().FromFile("a.png");
+    img.Filter().Sobel().X();
+}
+~~~
